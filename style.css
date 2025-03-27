@@ -1,0 +1,353 @@
+/* --- Global Styles & Resets --- */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    /* Color Palette */
+    --bg-dark1: #1a1a1d;   /* Very Dark Base */
+    /* --- MODIFIED BLUE --- */
+    --bg-blue1: #192638;   /* Darker Blue for Gradient Accent */
+
+    --panel-bg: rgba(44, 44, 50, 0.15);
+    --panel-bg-hover: rgba(55, 55, 62, 0.25);
+    --panel-border: rgba(200, 200, 200, 0.1);
+    --text-color-light: #f0f0f0;
+    --text-color-medium: #bdc3c7;
+    --accent-color: #5dade2; /* Lighter blue for static links (Kept the same) */
+    --accent-color-hover: #8ecae6;/* Even lighter blue (Kept the same) */
+    --shadow-color: rgba(0, 0, 0, 0.35);
+    --shadow-color-hover: rgba(0, 0, 0, 0.55);
+    --header-height: 70px;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    color: var(--text-color-light);
+    line-height: 1.6;
+    min-height: 100vh;
+    padding-top: var(--header-height);
+    /* Apply background via the class below */
+}
+
+@property --gradient-angle {
+    syntax: '<angle>'; /* Specifies that this property holds an angle value */
+    inherits: false;   /* Doesn't inherit from parent elements */
+    initial-value: 135deg; /* Starting angle */
+  }
+  
+  /* 2. Update the .animated-bg class */
+  .animated-bg {
+      /* --- Background Gradient Setup --- */
+      /* Use the --gradient-angle variable for the angle */
+      background: linear-gradient(
+          var(--gradient-angle, 135deg), /* Use variable, fallback to 135deg */
+          var(--bg-dark1) 0%,
+          var(--bg-dark1) 30%,
+          var(--bg-blue1) 38%,
+          var(--bg-blue1) 52%,
+          var(--bg-dark1) 60%,
+          var(--bg-dark1) 100%
+      );
+      /* Adjust size if needed, 400% might be sufficient with rotation */
+      background-size: 500% 500%;
+      background-attachment: fixed;
+  
+      /* --- Animation Application --- */
+      /* Apply BOTH animations */
+      animation:
+          simulatedFlow 25s ease-in-out infinite, /* Slightly slower flow */
+          rotateGradient 18s linear infinite;    /* Rotation animation */
+  }
+  
+  /* 3. Keyframes for the FLOW (Simpler Path) */
+  /* We can simplify the flow path now that rotation adds dynamism */
+  @keyframes simulatedFlow {
+      0% { background-position: 0% 50%; }    /* Start Left Middle */
+      25% { background-position: 50% 100%; } /* Move to Bottom Middle */
+      50% { background-position: 100% 50%; } /* Move to Right Middle */
+      75% { background-position: 50% 0%; }   /* Move to Top Middle */
+      100% { background-position: 0% 50%; }  /* Return to Left Middle */
+  }
+  
+  /* 4. Keyframes for the ROTATION */
+  @keyframes rotateGradient {
+      from {
+          --gradient-angle: 135deg; /* Start angle */
+      }
+      to {
+          /* Rotate a full 360 degrees from the start */
+          --gradient-angle: calc(135deg + 360deg);
+      }
+  }
+
+
+/* Scrollbar Styling */
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: var(--bg-dark1); }
+::-webkit-scrollbar-thumb { background: #444; border-radius: 5px; }
+::-webkit-scrollbar-thumb:hover { background: #666; }
+
+a { text-decoration: none; color: var(--accent-color); transition: color 0.3s ease; }
+a:hover { color: var(--accent-color-hover); }
+img { max-width: 100%; height: auto; display: block; }
+.hidden { display: none !important; }
+
+/* --- Title Bar --- */
+.title-bar {
+    position: fixed; top: 0; left: 0; width: 100%; height: var(--header-height);
+    background-color: rgba(26, 26, 29, 0.4); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+    border-bottom: 1px solid var(--panel-border); display: flex; justify-content: space-between;
+    align-items: center; padding: 0 40px; z-index: 1000; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+}
+.title-text a { font-size: 1.6em; font-weight: 600; color: var(--text-color-light); letter-spacing: 1px; }
+.title-text a:hover { color: var(--text-color-light); }
+.social-icons a { color: var(--text-color-medium); font-size: 1.8em; margin-left: 25px; transition: color 0.3s ease, transform 0.3s ease; }
+.social-icons a:hover { color: var(--text-color-light); transform: scale(1.1); }
+
+/* --- Homepage Main Content & Project Grid --- */
+.home-main { display: flex; justify-content: center; align-items: center; min-height: calc(100vh - var(--header-height)); padding: 60px 20px; }
+.project-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 50px; width: 100%; max-width: 1300px; margin: 0 auto; transition: opacity 0.5s ease, transform 0.5s ease; }
+.project-grid.hidden { opacity: 0; transform: scale(0.95); pointer-events: none; position: absolute; width: 0; height: 0; overflow: hidden; }
+
+/* --- Enhanced Frosted Glass Panels (With Tilt Effect Setup) --- */
+.project-panel {
+    position: relative; overflow: hidden; background-color: var(--panel-bg);
+    backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+    border: 1px solid var(--panel-border); border-radius: 15px;
+    padding: 30px 25px; text-align: center; box-shadow: 0 8px 32px 0 var(--shadow-color);
+    cursor: pointer; perspective: 1000px; transform-style: preserve-3d;
+    transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1),
+                box-shadow 0.4s cubic-bezier(0.25, 0.8, 0.25, 1),
+                background-color 0.4s ease;
+    transform: perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px) scale(1);
+}
+.project-panel::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background-image: url('images/noise.png'); background-repeat: repeat;
+    opacity: 0.12; z-index: 0; border-radius: inherit; pointer-events: none;
+}
+.project-panel h2 { position: relative; z-index: 1; margin-bottom: 20px; font-size: 1.4em; font-weight: 600; color: var(--text-color-light); }
+.project-panel img { position: relative; z-index: 1; border-radius: 8px; object-fit: cover; aspect-ratio: 16 / 10; width: 100%; margin-top: auto; box-shadow: 0 3px 10px rgba(0,0,0,0.2); }
+.project-panel:hover {
+    box-shadow: 0 15px 45px 0 var(--shadow-color-hover);
+    background-color: var(--panel-bg-hover);
+    /* Transform handled by JS */
+}
+
+
+/* =========================================================== */
+/* --- Project Detail Viewer (Full Screen Background FIXED) --- */
+/* =========================================================== */
+
+/* --- Main Viewer Wrapper (#project-detail-viewer from HTML) --- */
+.project-detail-viewer {
+    position: fixed; /* Fixed to viewport */
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 1100; /* Above other content when active */
+    pointer-events: none; /* Non-interactive initially */
+    visibility: hidden; /* Hidden initially */
+    /* Note: Opacity is controlled by the inner .project-detail-content's .active state now */
+}
+
+/* --- Background Layer (Blur + Color) on the WRAPPER --- */
+.project-detail-viewer::before {
+    content: '';
+    position: fixed; /* Fixed to viewport */
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: -1; /* Behind everything inside the viewer */
+    background-color: rgba(30, 39, 46, 0.4); /* Semi-transparent background */
+    backdrop-filter: blur(30px); /* Frosted glass effect */
+    -webkit-backdrop-filter: blur(30px);
+    pointer-events: none; /* Non-interactive */
+    opacity: 0; /* Hidden initially, controlled by .project-detail-content.active */
+    transition: opacity 0.5s ease; /* Fade in/out */
+}
+
+/* --- Noise Texture Layer on the WRAPPER --- */
+.project-detail-viewer::after {
+    content: '';
+    position: fixed; /* Fixed to viewport */
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: url('images/noise.png');
+    background-repeat: repeat;
+    mix-blend-mode: overlay; /* Blend noise nicely */
+    z-index: 0; /* Above ::before, below actual content */
+    pointer-events: none; /* Non-interactive */
+    opacity: 0; /* Hidden initially, controlled by .project-detail-content.active */
+    transition: opacity 0.5s ease; /* Fade in/out */
+}
+
+
+/* --- Individual Project Content Container (Scrollable) --- */
+.project-detail-content {
+    /* This element handles scrolling and content layout */
+    position: absolute; /* Positioned within the fixed viewer */
+    top: 0; left: 0; width: 100%; height: 100%;
+    overflow-y: auto; /* Enable vertical scrolling for content */
+    padding: calc(var(--header-height) + 40px) 20px 40px 20px; /* Space for header + content */
+    background-color: transparent; /* Content sits directly over viewer's background */
+    color: var(--text-color-light); /* Default text color */
+
+    /* Animation Properties */
+    opacity: 0; /* Hidden initially */
+    transform: translateY(20px); /* Initial slide-up state */
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    pointer-events: none; /* Non-interactive until active */
+}
+
+/* --- Active State for Individual Project Content --- */
+.project-detail-content.active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto; /* Allow interaction & scrolling */
+}
+
+/* --- Control WRAPPER's pseudo-elements via inner content's active state --- */
+/* When a project detail becomes active, fade in the viewer's background/noise */
+.project-detail-content.active + .project-detail-viewer::before, /* If viewer is sibling */
+.project-detail-viewer:has(.project-detail-content.active)::before /* If viewer wraps active content */ {
+    opacity: 1;
+}
+.project-detail-content.active + .project-detail-viewer::after, /* If viewer is sibling */
+.project-detail-viewer:has(.project-detail-content.active)::after /* If viewer wraps active content */ {
+    opacity: 0.1; /* Desired noise opacity */
+}
+/* Also make the wrapper itself visible and interactive when content is active */
+.project-detail-viewer:has(.project-detail-content.active) {
+     visibility: visible;
+     pointer-events: auto; /* Allow scroll on viewer */
+}
+
+
+/* --- Inner Content Styling (Inside Detail View) --- */
+/* These styles remain largely the same, ensure z-index is appropriate if needed */
+.project-detail-content .project-banner,
+.project-detail-content h1,
+.project-detail-content .project-specs,
+.project-detail-content .project-description {
+    max-width: 900px; /* Limit content width */
+    margin-left: auto; margin-right: auto;
+    position: relative; /* Needed if using z-index below */
+    /* z-index: 1; Usually not needed now as they are inside the scrolling container */
+}
+
+.project-detail-content .project-banner { width: 100%; max-height: 400px; object-fit: cover; border-radius: 15px; border: 1px solid var(--panel-border); margin-bottom: 40px; box-shadow: 0 5px 25px rgba(0,0,0,0.3); }
+.project-detail-content h1 { font-size: 2.8em; font-weight: 600; text-align: center; margin-bottom: 30px; color: var(--text-color-light); }
+.project-detail-content .project-specs { margin-bottom: 40px; padding: 25px; background-color: rgba(0, 0, 0, 0.2); border-radius: 10px; border: 1px solid var(--panel-border); }
+.project-detail-content .project-specs h2,
+.project-detail-content .project-specs h3 { margin-top: 0; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); font-weight: 600; color: var(--text-color-medium); font-size: 1.2em; }
+.project-detail-content .project-specs ul { list-style: none; display: flex; flex-wrap: wrap; gap: 12px 18px; padding-left: 0; }
+.project-detail-content .project-specs li { background-color: rgba(255, 255, 255, 0.1); padding: 8px 15px; border-radius: 20px; font-size: 0.9em; color: var(--text-color-medium); border: 1px solid rgba(255, 255, 255, 0.1); }
+.project-detail-content .project-description { padding-bottom: 60px; }
+.project-detail-content .project-description h2 { margin-top: 1.5em; margin-bottom: 0.8em; font-size: 1.5em; color: var(--text-color-light); border-bottom: 1px solid rgba(255, 255, 255, 0.15); padding-bottom: 0.3em; }
+.project-detail-content .project-description p { margin-bottom: 1.5em; font-size: 1.05em; color: var(--text-color-medium); }
+.project-detail-content .project-description .inline-image { border-radius: 8px; margin: 35px auto; display: block; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); max-width: 80%; border: 1px solid var(--panel-border); }
+.project-detail-content .project-description a { color: var(--accent-color); font-weight: 600; }
+.project-detail-content .project-description a:hover { color: var(--accent-color-hover); text-decoration: underline; }
+
+/* Close Button */
+.close-button {
+    position: fixed; top: calc(var(--header-height) + 15px); right: 30px;
+    background-color: rgba(0, 0, 0, 0.3); color: var(--text-color-medium);
+    border: 1px solid var(--panel-border); border-radius: 50%;
+    width: 40px; height: 40px; font-size: 28px; line-height: 38px; text-align: center;
+    cursor: pointer; z-index: 1200; /* Above viewer */
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+    backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
+    /* Ensure it's visible even if viewer opacity is 0 initially */
+    opacity: 1;
+}
+.close-button:hover { background-color: rgba(255, 255, 255, 0.2); color: var(--text-color-light); transform: scale(1.1); }
+
+/* --- Responsiveness --- */
+@media (max-width: 768px) {
+    :root { --header-height: 60px; }
+    .title-bar { padding: 0 20px; }
+    .title-text a { font-size: 1.3em; }
+    .social-icons { gap: 15px; }
+    .social-icons a, .social-icons .tooltip-container { font-size: 1.6em; }
+    .home-main { padding: 40px 15px; }
+    .project-grid { gap: 30px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+    .project-panel { padding: 25px 20px; }
+    .project-detail-content { padding: calc(var(--header-height) + 30px) 15px 30px 15px; }
+    /* Adjust blur on viewer's ::before */
+    .project-detail-viewer::before { backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); }
+    .project-detail-content h1 { font-size: 2.2em; }
+    .project-detail-content .project-banner { margin-bottom: 30px; }
+    .project-detail-content .project-specs { padding: 20px; }
+    .project-detail-content .project-description .inline-image { max-width: 95%; }
+    .close-button { top: calc(var(--header-height) + 10px); right: 20px; width: 35px; height: 35px; font-size: 24px; line-height: 33px; }
+}
+
+@media (max-width: 480px) {
+    .title-text a { font-size: 1.1em; }
+    .social-icons { gap: 12px; }
+    .social-icons a, .social-icons .tooltip-container { font-size: 1.4em; }
+    .project-grid { grid-template-columns: 1fr; gap: 25px; padding: 0 10px; }
+    .home-main { padding: 30px 10px; }
+    .project-detail-content { padding: calc(var(--header-height) + 20px) 10px 20px 10px; }
+    /* Adjust blur on viewer's ::before */
+    .project-detail-viewer::before { backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+    .project-detail-content h1 { font-size: 1.8em; margin-bottom: 20px; }
+    .project-detail-content .project-description h2 { font-size: 1.3em; }
+    .project-detail-content .project-description p { font-size: 1em; }
+    .project-detail-content .project-description .inline-image { max-width: 100%; margin: 20px auto; }
+    .project-detail-content .project-specs { padding: 15px; }
+    .project-detail-content .project-specs h2, .project-detail-content .project-specs h3 { margin-bottom: 15px; padding-bottom: 10px; font-size: 1.1em;}
+    .project-detail-content .project-specs li { font-size: 0.85em; padding: 6px 12px;}
+    .close-button { width: 32px; height: 32px; font-size: 20px; line-height: 30px; right: 15px; }
+}
+/* --- Tooltip Styles --- */
+.tooltip-text {
+    /* --- Visibility & Initial State --- */
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
+    z-index: 10;
+    /* --- POSITIONING MODIFIED: Place below container --- */
+    top: 100%; /* Position top edge at the bottom edge of the container */
+    left: 50%;
+    transform: translateX(-80%) translateY(0%); /* Center adjust + small gap BELOW */
+
+    /* --- Appearance (Frosted Glass) - Remains the same --- */
+    background-color: rgba(44, 44, 50, 0.6);
+    color: var(--text-color-light);
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--panel-border);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+
+    /* --- Text & Sizing - Remains the same --- */
+    font-size: 0.8em;
+    white-space: nowrap;
+    pointer-events: none;
+
+    /* --- Transition - Remains the same --- */
+    transition: opacity 0.3s ease, visibility 0s linear 0.3s, transform 0.3s ease;
+}
+
+/* --- Show Tooltip on Container Hover --- */
+.tooltip-container:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+    /* --- POSITIONING MODIFIED: Move slightly further down --- */
+    transform: translateX(-80%) translateY(5%); /* Move slightly further down */
+    transition-delay: 0s, 0s, 0s;
+}
+
+/* --- REMEMBER TO KEEP THESE STYLES TOO --- */
+.tooltip-container {
+    position: relative;
+    display: inline-block;
+}

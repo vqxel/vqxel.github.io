@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reza Bagheri's Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts (Example: Poppins) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body class="animated-bg">
+
+    <header class="title-bar">
+        <div class="title-text">
+            <!-- Clicking title now reloads/resets the page via JS -->
+            <a href="#" id="home-link">Reza Bagheri's Portfolio</a>
+        </div>
+        <div class="social-icons">
+            <a href="https://github.com/vqxel" target="_blank" rel="noopener noreferrer" aria-label="GitHub Profile">
+                <i class="fab fa-github"></i>
+            </a>
+            <a href="https://www.linkedin.com/in/reza-bagheri-uci/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn Profile">
+                <i class="fab fa-linkedin"></i>
+            </a>
+            <div class="tooltip-container">
+                <a href="mailto:rbagher1@uci.edu?subject=Inquiry%20from%20Portfolio" aria-label="Email Reza">
+                    <i class="fas fa-envelope"></i>
+                </a>
+                <span class="tooltip-text">rbagher1@uci.edu</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="home-main">
+        <!-- Project Grid - Will be hidden when a project is viewed -->
+        <section class="project-grid" id="project-grid">
+            <!-- Project Panel 1 -->
+            <article class="project-panel" data-project-id="project1">
+                <h2>Micromouse</h2>
+                <img src="images/rezq_micromouse.jpg" alt="Thumbnail for Rezq Micromouse">
+            </article>
+
+            <!-- Project Panel 2 -->
+            <article class="project-panel" data-project-id="project2">
+                <h2>PoseFixer</h2>
+                <img src="images/posefixer_schematic.png" alt="Thumbnail for PoseFixer">
+            </article>
+
+            <!-- Project Panel 3 -->
+            <article class="project-panel" data-project-id="project3">
+                <h2>FPGA HW Acceleration</h2>
+                <img src="images/fpga_fluff.jpg" alt="Thumbnail for Project Gamma">
+            </article>
+        </section>
+
+        <!-- Container for Project Details - Will be shown when a project is clicked -->
+        <div class="project-detail-viewer" id="project-detail-viewer">
+            <!-- Content will be loaded here dynamically, OR pre-loaded and shown -->
+
+            <!-- === Pre-loaded Project Detail Content === -->
+
+            <!-- Project 1 Detail Content (Initially Hidden) -->
+            <article id="project1-detail" class="project-detail-content hidden">
+                <button class="close-button" aria-label="Close project details">×</button>
+                <img src="images/airlitetalonfx_closeup_nobg.png" alt="Micromouse Project Banner" class="project-banner">
+                <h1>Micromouse</h1>
+            
+                <section class="project-specs">
+                    <h2>Tools and Technologies Used</h2>
+                    <ul>
+                        <li>STM32</li>
+                        <li>KiCAD</li>
+                        <li>C++</li>
+                        <li>STM32CubeIDE</li>
+                        <li>PID Control</li>
+                        <li>Custom PCB Design</li>
+                    </ul>
+                </section>
+            
+                <section class="project-description">
+                    <h2>Overview</h2>
+                    <p>I designed and built AirLiteTalonFX, an autonomous Micromouse robot that navigates and solves a 16 by 16 maze. The robot starts with no knowledge of the maze layout and must explore, map, and compute an optimal path to the center. This project includes full hardware design, embedded firmware development, and custom pathfinding algorithms.</p>
+            
+                    <h2>Hardware Design</h2>
+                    <p>I built the robot around a custom PCB using a raw STM32 microcontroller. I chose this approach over using a Bluepill development board because I wanted complete control over the layout and integration. I included all the necessary support components directly on the board to optimize for space and reliability. I selected the STM32 because it is low-cost, well-supported, and already familiar to my university's Micromouse teams.</p>
+            
+                    <p>To drive the motors, I used an L293D motor driver and controlled it with PWM signals generated by the STM32. I carefully calculated and separated power and signal trace widths to ensure safe and stable operation. I installed infrared range sensors for wall detection and optical encoders for wheel feedback. In a future iteration, I plan to add an IMU to improve movement tracking and odometry. I power the system with a lithium-ion battery and regulate voltage with two linear regulators: one outputs 5V for the motors and the other 3.3V for control logic. The PCB itself serves as the chassis, and I 3D-printed custom mounts to secure the motors in place.</p>
+            
+                    <h2>Maze Mapping and Algorithms</h2>
+                    <p>For maze exploration, I implemented a modified version of the flood-fill algorithm. I selected this method because it is simple, efficient, and suitable for real-time use in a 16 by 16 maze. Once the maze is fully mapped, I run a custom path optimization algorithm that builds on flood-fill results. My algorithm selects the shortest route while also minimizing turns to maximize forward velocity and reduce slowdowns.</p>
+            
+                    <h2>Firmware Development</h2>
+                    <p>I wrote all firmware in C++ using STM32CubeIDE. I used the IDE to configure peripherals and generate HAL drivers. On top of that foundation, I implemented PID control, motor drive using PWM, and encoder-based motion feedback. I am currently completing the remaining control logic as I finish assembling and testing the hardware.</p>
+            
+                    <h2>Sensor Calibration Strategy</h2>
+                    <p>I plan to calibrate the infrared range sensors by comparing their output to actual distances in different lighting conditions. I will use Google Sheets to analyze and normalize the data and create multiple calibration profiles. In code, I will include the ability to switch between these profiles depending on the operating environment.</p>
+            
+                    <h2>Performance Goals</h2>
+                    <p>My goal for this iteration is to complete the maze with a working physical robot that follows the optimal path. In future versions, I will focus on improving performance metrics such as average speed and total acceleration. I will use these metrics to reduce speed fluctuations, minimize unnecessary turns, and improve smoothness and efficiency.</p>
+            
+                    <h2>Challenges and Design Iteration</h2>
+                    <p>The first version of my board had an issue with incorrect pin assignments for the PWM motor signals. Because of this, I was not able to control the motors. I corrected the design and created a new revision with the proper pin configuration. I also redesigned the board so that all components are on the top side. This allowed me to use a solder stencil and reflow the board on a hot plate, which was much more reliable than hand-soldering the STM32 and other fine-pitch components. My initial attempt with hand-soldering was very challenging and produced poor results, so I revised the board layout to streamline assembly and improve consistency.</p>
+            
+                    <h2>Lessons Learned</h2>
+                    <p>Throughout this project, I learned valuable lessons in modular PCB layout, design for manufacturability, and time management. I should have started firmware development earlier to allow more time for testing. As the incoming Micromouse team lead at UCI, I plan to update our development schedule and provide better support for new teams. My goal is to make the process more approachable and help others avoid the mistakes I encountered.</p>
+            
+                    <h2>Current Status</h2>
+                    <p>I am currently finalizing hardware assembly and continuing firmware development. I will be competing with this robot at the AAMC Micromouse competition in May.</p>
+            
+                    <p><a href="#" target="_blank" rel="noopener noreferrer">Live Demo</a> | <a href="#" target="_blank" rel="noopener noreferrer">Source Code</a></p>
+                </section>
+            </article>
+
+            <!-- Project 2 Detail Content (Initially Hidden) -->
+            <article id="project2-detail" class="project-detail-content hidden">
+                <button class="close-button" aria-label="Close project details">×</button>
+                <img src="images/posefixer_closeup.jpg" alt="Custom BC832 Breakout Board for Posture Tracker" class="project-banner">
+            
+                <h1>PoseFixer</h1>
+            
+                <section class="project-specs">
+                    <h2>Tools and Technologies Used</h2>
+                    <ul>
+                        <li>EasyEDA (Schematic and PCB Design)</li>
+                        <li>Nordic NRF52832</li>
+                        <li>Hand Soldering</li>
+                        <li>Hot Plate Reflow Soldering</li>
+                        <li>Datasheet-Based Component Selection</li>
+                        <li>Rust Firmware Development</li>
+                        <li>Bluetooth Low Energy</li>
+                    </ul>
+                </section>
+            
+                <section class="project-description">
+                    <h2>Overview</h2>
+                    <p>I designed PoseFixer as a wearable posture correction device. The system mounts to the user's back and uses a resistive flex sensor to detect poor posture based on spinal curvature. I implemented firmware that monitors for a sustained increase in sensor resistance, which indicates slouching. When detected, the device activates a vibration motor for haptic feedback and sends posture alerts to a paired smartphone using Bluetooth Low Energy (BLE). I used a Nordic NRF52832 microcontroller for BLE functionality and processing, integrated through the Fanstel BC832 module due to its onboard antenna and compact form factor.</p>
+            
+                    <h2>Hardware Development</h2>
+                    <p>Before designing the final miniaturized version, I built a custom breakout board to support development and hardware validation. I included 2.54mm pitch headers to access all key I/O pins on the BC832 module. I also designed and integrated a power management circuit using the Texas Instruments TPS61221DCKR buck-boost converter, which operates down to 1.2V and provides a regulated 3.3V output. This allowed me to test the system with both AAA and CR2032 batteries. This development board gave me a flexible platform for firmware testing, voltage validation, and SWD debugging prior to finalizing the wearable version.</p>
+            
+                    <img src="images/posefixer_layout.jpg" alt="PCB Layout of the BC832 Development Board" class="inline-image">
+            
+                    <h2>PCB Layout and Manufacturing</h2>
+                    <p>I designed the schematic and PCB layout using the EasyEDA cloud-based platform. I followed JLCPCB’s guidelines for a two-layer FR4 board and implemented the required antenna keep-out area beneath the BC832’s onboard antenna to ensure proper RF performance. After fabrication by JLCPCB, I manually soldered through-hole headers and reflow soldered all surface-mount components using a hot plate.</p>
+            
+                    <h2>Assembly and Debugging</h2>
+                    <p>The surface-mount reflow process required precise manual solder paste application, since I did not use a stencil. This proved especially difficult for fine-pitch parts and the LGA package on the BC832 module. I encountered solder bridging issues on the TPS61221DCKR during early assembly attempts, which I resolved by refining my paste application technique. I also had to take care to align the BC832 module correctly and avoid tilting during reflow. After assembly, I verified the 3.3V power rail using a multimeter, checked for shorts, and successfully flashed test firmware using SWD. I was able to confirm BLE advertising from the device using a mobile phone. I did observe instability during battery-powered operation, which I plan to investigate further using an oscilloscope to analyze power delivery behavior.</p>
+            
+                    <h2>Firmware Development</h2>
+                    <p>I wrote the firmware in Rust to take advantage of its memory safety and the growing ecosystem of embedded HALs and PACs available for the NRF52 series. I implemented a BLE communication strategy that focuses on local data processing to reduce power usage. The device transmits only minimal status updates using a custom GATT service when necessary. This approach is well suited for low-power wearable applications.</p>
+            
+                    <h2>Project Status</h2>
+                    <p>I completed the board design, assembly, and initial validation of power and BLE functionality. This prototype confirms the viability of my core hardware and firmware architecture and sets the stage for the next phase: a miniaturized, wearable posture tracker with fully integrated BLE-based health data transmission.</p>
+            
+                    <!-- Optional links -->
+                    <!-- <p><a href="#" target="_blank" rel="noopener noreferrer">View Schematics (GitHub)</a> | <a href="#" target="_blank" rel="noopener noreferrer">Board Design Files</a></p> -->
+                </section>
+            </article>
+
+            <!-- Project 3 Detail Content (Initially Hidden) -->
+            <article id="project3-detail" class="project-detail-content hidden">
+                 <button class="close-button" aria-label="Close project details">×</button>
+                 <img src="images/fpga_u250_nobg.png" alt="Project Gamma Banner" class="project-banner">
+                 <h1>FPGA HW Acceleration</h1>
+                 <section class="project-specs">
+                    <h3>Tools and Technologies Used</h3>
+                    <ul><li>Vitis HLS</li><li>OpenCL</li><li>XRT</li><li>Verilog</li></ul>
+                 </section>
+                 <section class="project-description">
+                    <p>This project is a part of the research lab I'm working at. We are working on upgrading the CERN Large Hadron Supercollider in Switzerland to be able to handle incoming data at rates orders of magnitude higher than what it can currently handle. I'm newer to this project so I don't have too much to say but I've been learning a lot about using Vitis HLS, OpenCL, and Verilog. Paired with one of the courses I'm taking this quarter (EECS 31L), I'm significantly improving my Verilog skills so I can start being significantly more capable at making advanced FPGA kernels to do entire tasks or accelerate other hardware. I have already written quite a few hosts (using both OpenCL and XRT) which is really just the tip of the iceberg when it comes to this field. This is something I'm very interested in, which is why I'm adding it to my portfolio even though I haven't completed any specific projects as I intend to have a significant amount of stuff to put here soon!</p>
+                 </section>
+            </article>
+
+            <!-- === End Pre-loaded Content === -->
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
